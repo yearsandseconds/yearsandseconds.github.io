@@ -154,7 +154,7 @@ To solve the lab, exploit the XXE vulnerability to perform an SSRF attack tha
 <p>Good question! We will try to chain XXE (XML external entity) injection with SSRF (server-side request forgery) to get our hands on some sweet and forbidden sensitive data.</p>
 <p>Let&rsquo;s go and don&rsquo;t forget to run Burp! When we first open the lab, we see a webstore with some items. When we open a random item, there&rsquo;s a &ldquo;Check stock&rdquo; feature so let&rsquo;s click on that, then let&rsquo;s open Burp and send that request (POST /product/stock) from HTTP history to the Repeater.</p>
 <p>We can see that the request includes some XML:</p>
-<p><img src="/Images/XXE01_images/XXE01_01.png" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_01.png" alt=""></p>
 <p>To perform XXE, the first thing we need to do is create a DOCTYPE element that contains an external entity. The structure of the entity looks like this:</p>
 <p><code>&lt;!ENTITY name SYSTEM &quot;URL/URI&quot; &gt;</code></p>
 <p>So basically we have the keyword ENTITY, then the name of the entity (which can be random), the keyword SYSTEM and a location from which the value of the entity will be loaded.</p>
@@ -163,16 +163,16 @@ To solve the lab, exploit the XXE vulnerability to perform an SSRF attack tha
 <p>In simple terms, we are linking &ldquo;randomname&rdquo; to &ldquo;http://169.254.169.254&rdquo;, so the next time we say &ldquo;randomname&rdquo;, the app replies: &ldquo;Aah, I see, you mean http://169.254.169.254&rdquo;.</p>
 <p>Let&rsquo;s insert the DOCTYPE element right after the XML declaration, on the second row.</p>
 <p>After that, all we need to do to is point to this entity that we just created somewhere in the XML. We can do that by using the name of the entity (&ldquo;randomname&rdquo; in this case) between an ampersand (&amp;) and a semicolon (;) and replacing the current productId value with that. So now our XML should look like this:</p>
-<p><img src="/Images/XXE01_images/XXE01_02.png" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_02.png" alt=""></p>
 <p>Let&rsquo;s send the request and observe the response:</p>
-<p><img src="/Images/XXE01_images/XXE01_03.png" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_03.png" alt=""></p>
 <p>Remember what that AWS documentation said? The one that mentioned a certain <code>http://169.254.169.254/latest/meta-data/</code> ? And surprise-surprise, here we also have &ldquo;latest&rdquo;, so it&rsquo;s most probably a folder name. Interesting&hellip; Will it reveal us the location of something more sensitive? Only one way to find out!</p>
 <p>Our next request will be the same with just one change: in the XML we add the name we just discovered, /latest, to the URL. Now the response will be &ldquo;meta-data&rdquo;. Now add that to the URL and repeat, repeat, repeat the process. The last request will look like this:</p>
-<p><img src="/Images/XXE01_images/XXE01_04.png" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_04.png" alt=""></p>
 <p>And after you send this request, the response will contain AWS credentials:</p>
-<p><img src="/Images/XXE01_images/XXE01_05.png" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_05.png" alt=""></p>
 <p>And with that, we have solved the lab and it&rsquo;s time for a cup of coffee.</p>
-<p><img src="/Images/XXE01_images/XXE01_06.gif" alt=""></p>
+<p><img src="/images/XXE01_images/XXE01_06.gif" alt=""></p>
 
         </section>
       </div>

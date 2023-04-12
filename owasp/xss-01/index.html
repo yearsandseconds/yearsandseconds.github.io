@@ -137,30 +137,30 @@
 <p><code>This lab contains a reflected cross-site scripting vulnerability in the search blog functionality where angle brackets are HTML-encoded. To solve this lab, perform a cross-site scripting attack that injects an attribute and calls the 'alert' function.</code></p>
 <p>Let&rsquo;s go! When we open the lab, we see that it&rsquo;s a blog with several posts and a search bar at the top of the page. Since we know that there is a vulnerability in the search functionality, let&rsquo;s enter something random there and see where our input is reflected. I went with the representation of my feelings when I first wake up in the morning: &ldquo;aaaaaaaa&rdquo;.</p>
 <p>Let&rsquo;s view page source:</p>
-<p><img src="/Images/XSS01_images/XSS01_01.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_01.png" alt=""></p>
 <p>Next let&rsquo;s try out some symbols that we need for achieving XSS: angle brackets(&lt;&gt;), single quote (&rsquo;), double quote (&quot;):</p>
-<p><img src="/Images/XSS01_images/XSS01_02.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_02.png" alt=""></p>
 <p>We can see that in the first instance all of these symbols are HTML-encoded but in the second case, inside the input tag, only angle brackets are encoded, but single quote and double quote are not. Okay, we can work with this&hellip;</p>
 <p>Something that often comes in handy when dealing with XSS is <a href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">Portswigger&rsquo;s XSS cheat sheet</a> . Let&rsquo;s try finding a payload that we could use inside the input tag. For that we need to choose &ldquo;input&rdquo;, &ldquo;all events&rdquo; and &ldquo;all browsers&rdquo;:</p>
-<p><img src="/Images/XSS01_images/XSS01_03.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_03.png" alt=""></p>
 <p>There are a lot of results, however not all of them usable in this case. Ideally I want to find something that is simple, can be used without angle brackets and is Chrome-compatible (since that&rsquo;s the browser I&rsquo;m currently using).</p>
 <p>For example this onerror payload seems to meet the brief at first glance:</p>
-<p><img src="/Images/XSS01_images/XSS01_04.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_04.png" alt=""></p>
 <p>However, when we try it out (I will explain how to alter the cheat sheet payload for our needs below) nothing happens because the input tag already has a &ldquo;type&rdquo; attribute and adding a second one will not really help our cause:</p>
-<p><img src="/Images/XSS01_images/XSS01_05.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_05.png" alt=""></p>
 <p>So depending on the context this step might require a bit of trial and error to find what works, but that&rsquo;s all a part of the process!</p>
 <p>Next in my search for something simple, Chrome-y and bracket-free, I see this onfocus payload that looks doable:</p>
-<p><img src="/Images/XSS01_images/XSS01_06.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_06.png" alt=""></p>
 <p>Now, how to make this payload suitable? First we need to escape that morning &ldquo;aaaaaaaa&rdquo; feeling, which we can do by adding a double quote . Then let&rsquo;s add the rest of the payload and encode the spaces into %20 (or well, we can let our browser do that for us) so our payload will look like this:</p>
 <p><code>?search=aaaaaaaa&quot;%20autofocus%20onfocus=alert(1)</code></p>
 <p>Nothing happens and this is what the page source looks like:</p>
-<p><img src="/Images/XSS01_images/XSS01_07.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_07.png" alt=""></p>
 <p>We can see that we managed to successfully escape the value attribute, but since we did that we have one leftover double quote at the very end of the tag. Let&rsquo;s try to fix it by adding another &quot; before alert(1) so that alert(1) would then be between quotes.</p>
 <p><code>?search=aaaaaaaa&quot;%20autofocus%20onfocus=&quot;alert(1)</code></p>
 <p>And now we have triggered the popup and the lab is solved!</p>
-<p><img src="/Images/XSS01_images/XSS01_08.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_08.png" alt=""></p>
 <p>Let&rsquo;s check the page source once more to see what it looks like:</p>
-<p><img src="/Images/XSS01_images/XSS01_09.png" alt=""></p>
+<p><img src="/images/XSS01_images/XSS01_09.png" alt=""></p>
 <p>Now we can see that there are not leftover characters anywhere and everything is looking nice and clean.</p>
 <p>Of course, this is not the only payload out there that works in this scenario. For example the following would also do the trick:</p>
 <p><code>&quot;%20onmouseover=&quot;alert(1)</code></p>

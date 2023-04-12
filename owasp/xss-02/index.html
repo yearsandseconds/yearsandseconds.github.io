@@ -136,17 +136,17 @@
 <p>This is the information that we are starting with:</p>
 <p><code>This lab contains a stored cross-site scripting vulnerability in the comment functionality. To solve this lab, submit a comment that calls the 'alert' function when the comment author name is clicked.</code></p>
 <p>When we open the lab, we see that it&rsquo;s a blog with different posts. When we open a post, we see a comment functionality. Let&rsquo;s try adding something random in every field and let&rsquo;s post the comment:</p>
-<p><img src="/Images/XSS02_images/XSS02_01.png" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_01.png" alt=""></p>
 <p>Now when we go back to the comment section, this is what we see:</p>
-<p><img src="/Images/XSS02_images/XSS02_02.png" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_02.png" alt=""></p>
 <p>And the page source looks like this:</p>
-<p><img src="/Images/XSS02_images/XSS02_03.png" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_03.png" alt=""></p>
 <p>Interesting! When we click on the name &ldquo;john&rdquo;, we are taken to the page https://YOUR-LAB-ID/helpme.com. We see that what we entered in the website field ended up as the value of the &ldquo;href&rdquo; attribute. Perhaps we can enter something malicious in that field so when someone clicks the name of the author of the comment, they are taken to where they absolutely did not want to go, or even worse - they see a popup that says &ldquo;1&rdquo;!</p>
-<p><img src="/Images/XSS02_images/XSS02_04.gif" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_04.gif" alt=""></p>
 <p>Fun fact: href allows us to insert javascript by entering the word &ldquo;javascript&rdquo;, followed by whatever we want to happen next. Makes sense, right? So let&rsquo;s try what happens when we post another comment and enter &ldquo;javascript:alert(1)&rdquo; in the website field:</p>
-<p><img src="/Images/XSS02_images/XSS02_05.png" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_05.png" alt=""></p>
 <p>Let&rsquo;s post it, open the comment section of the blog post again and click on the name &ldquo;john&rdquo; (or whatever you chose).</p>
-<p><img src="/Images/XSS02_images/XSS02_06.png" alt=""></p>
+<p><img src="/images/XSS02_images/XSS02_06.png" alt=""></p>
 <p>And there it is, the evil popup! Our work here is done for today&hellip;</p>
 
         </section>

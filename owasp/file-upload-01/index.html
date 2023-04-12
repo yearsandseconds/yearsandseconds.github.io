@@ -146,11 +146,11 @@ You can log in to your own account using the following credentials: <code>wiene
 </article>
 <p>Okay, let&rsquo;s go! Also, don&rsquo;t forget to run Burp, we will need that very soon.</p>
 <p>First, let&rsquo;s log in with the credentials wiener:peter.  On the &ldquo;My account&rdquo; page we can see a place for uploading  an avatar. Since we&rsquo;re doing a file upload vulnerability lab, then this is where the magic happens!</p>
-<p><img src="/Images/File-upload01_images/file_upload_01_01.png" alt=""></p>
+<p><img src="/images/File-upload01_images/file_upload_01_01.png" alt=""></p>
 <p>As our goal is to get the contents of the file /home/carlos/secret, let&rsquo;s create a basic PHP web shell that allows us to do just that, such as:</p>
 <p><code>&lt;?php echo file_get_contents('/home/carlos/secret'); ?&gt;</code></p>
 <p>You can name it whatever you want, I went with shelly.php. Let&rsquo;s try to upload it and see what happens. This is the response that we get:</p>
-<p><img src="/Images/File-upload01_images/file_upload_01_02.png" alt=""></p>
+<p><img src="/images/File-upload01_images/file_upload_01_02.png" alt=""></p>
 <p>Let&rsquo;s head on to Burp, check HTTP history and find the request that was used to attempt to upload the file - that would be POST /my-account/avatar. When we take a look at the response to this request, we can see that we are dealing with an Apache server. Let&rsquo;s forward the request to Repeater.</p>
 <p>Apache uses a configuration file called .htaccess which provides a way to make configuration changes on a per-directory basis. The Apache HTTP server tutorial recommends avoiding the use of .htaccess files and brings out security as one of the reasons for that. &ldquo;You are permitting users to modify server configuration,&rdquo; it says. &ldquo;It may result in changes over which you have no control,&rdquo; it says. Sounds perfect, let&rsquo;s try to exploit that!</p>
 <p>Let&rsquo;s try to smuggle in our PHP web shell with a different extension. What we are going to do is tell the .htaccess file that we want to add a file extension (an arbitrary one, I used .lol) that would be run as PHP - it means that the extension should be associated with the MIME type application/x-httpd-php.</p>
@@ -169,12 +169,12 @@ You can log in to your own account using the following credentials: <code>wiene
 </li>
 </ol>
 <p>This is what it looks like:</p>
-<p><img src="/Images/File-upload01_images/file_upload_01_03.png" alt=""></p>
+<p><img src="/images/File-upload01_images/file_upload_01_03.png" alt=""></p>
 <p>When we send the request, the file is uploaded successfully. Now let&rsquo;s try out the new extension!</p>
 <p>Let&rsquo;s go back to the original POST /my-account/avatar request. Everything else remains the same, we only need to change the file extension, so our file name goes from shelly.php to shelly.lol, and we are able to upload it with the following response:</p>
-<p><img src="/Images/File-upload01_images/file_upload_01_04.png" alt=""></p>
+<p><img src="/images/File-upload01_images/file_upload_01_04.png" alt=""></p>
 <p>When we go back to the &ldquo;My account&rdquo; page with Burp running, then Burp&rsquo;s HTTP history reveals us the location of the webshell which is /files/avatars/shelly.lol</p>
-<p><img src="/Images/File-upload01_images/file_upload_01_05.png" alt=""></p>
+<p><img src="/images/File-upload01_images/file_upload_01_05.png" alt=""></p>
 <p>Now let&rsquo;s check the response to this request and there we can see the contents of /home/carlos/secret that we needed to solve the lab. Hooray!</p>
 
         </section>

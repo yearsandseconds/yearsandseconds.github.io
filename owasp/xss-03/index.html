@@ -137,22 +137,22 @@
 <p><code>This lab contains a DOM-based cross-site scripting vulnerability in the stock checker functionality. It uses the JavaScript 'document.write' function, which writes data out to the page. The 'document.write' function is called with data from 'location.search' which you can control using the website URL. The data is enclosed within a select element. To solve this lab, perform a cross-site scripting attack that breaks out of the select element and calls the 'alert' function.</code></p>
 <p>When we open the lab, we see a web store with different items. Let&rsquo;s open one of them (I went with the first one). We can see that the URL of the page we are in is &ldquo;https://YOUR-LAB-ID/product?productId=1&rdquo;</p>
 <p>Now let&rsquo;s open the inspector and check the &ldquo;Sources&rdquo; tab. Our goal is to find a script that would have a source that we could control. Here we see a script that is telling us, in simplified terms, that window.location.search is being searched for storeID. Perhaps that is something we can work with&hellip;</p>
-<p><img src="/Images/XSS03_images/XSS03_01.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_01.png" alt=""></p>
 <p>When we open the &ldquo;Console&rdquo; tab in the inspector and type in &ldquo;location.search&rdquo;, we see a part of the URL reflected back to us:</p>
-<p><img src="/Images/XSS03_images/XSS03_02.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_02.png" alt=""></p>
 <p>So what happens when we add the parameter &ldquo;storeId&rdquo; to the URL? We can assume that it will also be reflected in location.search, right? Only one way to know for sure:</p>
 <p><code>https://YOUR-LAB-ID/product?productId=1&amp;storeId=somethingrandom</code></p>
 <p>Well, yes, there it is. We have found our source:</p>
-<p><img src="/Images/XSS03_images/XSS03_03.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_03.png" alt=""></p>
 <p>Also, when we scroll to the bottom of the page we see that whatever we entered as the value of the &ldquo;storeId&rdquo; parameter has been added to the list of stores in the dropdown menu:</p>
-<p><img src="/Images/XSS03_images/XSS03_04.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_04.png" alt=""></p>
 <p>Now let&rsquo;s see what it looks like in the &ldquo;Elements&rdquo; tab of the inspector:</p>
-<p><img src="/Images/XSS03_images/XSS03_05.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_05.png" alt=""></p>
 <p>Let&rsquo;s try to escape the tags we are in (select and option) and then enter an XSS payload (e.g <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>) to see if we can trigger a popup. The URL will look like this:</p>
 <p><code>https://YOUR-LAB-ID/product?productId=1&amp;storeId=somethingrandom&lt;/option&gt;&lt;/select&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
 <p>And we get the popup, congrats!</p>
 <p>When we check the &ldquo;Elements&rdquo; tab, we see that we successfully managed to close the open tags and enter our script:</p>
-<p><img src="/Images/XSS03_images/XSS03_06.png" alt=""></p>
+<p><img src="/images/XSS03_images/XSS03_06.png" alt=""></p>
 <p>Of course, this is not the only XSS payload that works here. For example, instead of <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> we could also go for another simple one such as <code>&lt;img src=x onerror=alert(1)&gt;</code>.</p>
 <p>That&rsquo;s it for today, see you around!</p>
 

@@ -145,20 +145,20 @@ To solve the lab, perform a cross-site scripting attack that calls the &ldquo;
 </article>
 <p>When we open the lab, we see a search bar. Let&rsquo;s try entering a random XSS payload there. For example I tried <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> and <code>&lt;img src=1 onerror=alert(1)&gt;</code>, both of which returned a &ldquo;Tag is not allowed error&rdquo;.</p>
 <p>Okay, so it looks like (at least some, probably most) tags are blocked. The next thing that we might want to do is to see whether we can find any tags that are not blocked. For this we can use Burp Intruder. Let&rsquo;s find the <code>GET /?search=payload</code> request in HTTP History and send it to the Intruder. Then let&rsquo;s click &ldquo;Clear §&rdquo;, insert angle brackets instead of our previous payload and then let&rsquo;s click &ldquo;Add §&rdquo; twice between the angle brackets so the value of the search term is now <code>&lt;§§&gt;</code> :</p>
-<p><img src="/Images/XSS04_images/XSS04_01.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_01.png" alt=""></p>
 <p>Now we need to add some payloads. For this we can use Portswigger&rsquo;s handy <a href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">XSS cheat sheet</a> . Let&rsquo;s click &ldquo;Copy tags to clipboard&rdquo;, then let&rsquo;s open the &ldquo;Payloads&rdquo; tab in the Intruder and paste the tags under the &ldquo;Payload settings&rdquo; option:</p>
-<p><img src="/Images/XSS04_images/XSS04_02.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_02.png" alt=""></p>
 <p>Then let&rsquo;s start the attack. Once we have the results, we can sort them by status. We see that the majority of payloads result in a 400 status code, but there are a few that give us a much happier 200 response!:</p>
-<p><img src="/Images/XSS04_images/XSS04_03.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_03.png" alt=""></p>
 <p>When we take a look at the cheat sheet again, we can see that <code>&lt;animatetransform&gt;</code> is a tag that is used within the <code>&lt;svg&gt;</code> tag. Luckily for us, neither of the tags is blocked, so let&rsquo;s try finding a working payload containing these two tags. For that we need to choose &ldquo;svg-&gt;animatetransform&rdquo;, &ldquo;all events&rdquo; and &ldquo;all browsers&rdquo; in the cheat sheet:</p>
-<p><img src="/Images/XSS04_images/XSS04_04.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_04.png" alt=""></p>
 <p>As a result, we see three event handlers that don&rsquo;t require user interaction, so let&rsquo;s try these out:</p>
-<p><img src="/Images/XSS04_images/XSS04_05.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_05.png" alt=""></p>
 <p>After trying these three, it turns out that only the first one gives us a popup, the other two result in an &ldquo;Event is not allowed&rdquo; error. Since there were only three options to try out, I did it manually, but in case of more options it wouldn&rsquo;t be so convenient to try them out one by one. In that case Burp Intruder would help us out again, so let&rsquo;s see how to use that instead of this manual approach.</p>
 <p>Let&rsquo;s go back to the Intruder and replace our current payload with <code>&lt;svg&gt;&lt;animatetransform%20=1&gt;</code>, then let&rsquo;s add two § signs before the = sign, so now the value of the search term is <code>&lt;svg&gt;&lt;animatetransform%20§§=1&gt;</code> :</p>
-<p><img src="/Images/XSS04_images/XSS04_06.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_06.png" alt=""></p>
 <p>Now we need to add a payload list. Let&rsquo;s click &ldquo;Copy events to clipboard&rdquo; in the XSS cheat sheet, open the &ldquo;Payloads&rdquo; tab in the Intruder and paste the tags under the &ldquo;Payload settings&rdquo; option, just like before. Then let&rsquo;s start the attack. As expected, we only get one result with the 200 status code and that is &ldquo;onbegin&rdquo;:</p>
-<p><img src="/Images/XSS04_images/XSS04_07.png" alt=""></p>
+<p><img src="/images/XSS04_images/XSS04_07.png" alt=""></p>
 <p>Then we find the correct payload in the cheat sheet, enter that into the search bar, et voilà, the lab is solved!</p>
 
         </section>

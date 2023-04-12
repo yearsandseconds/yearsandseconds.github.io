@@ -146,24 +146,24 @@ To solve the lab, use a parameter entity to make the XML parser issue a DNS look
 </article>
 <p>Let&rsquo;s run Burp and let&rsquo;s start!</p>
 <p>When we open the lab, we see a webstore with different products. Let&rsquo;s open one of them and click on the &ldquo;Check stock&rdquo; button.</p>
-<p><img src="/Images/XXE02_images/XXE02_01.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_01.png" alt=""></p>
 <p>Now let&rsquo;s head to Burp, find that request (POST /product/stock) in HTTP history and send it to Repeater. We can see that the request includes some XML:</p>
-<p><img src="/Images/XXE02_images/XXE02_02.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_02.png" alt=""></p>
 <p>To perform XXE, the first thing we need to do is create a DOCTYPE element that contains an entity. If you want to know a little bit more about how entities function, then you can check out my write-up for Portswigger&rsquo;s apprentice-level lab &ldquo;Exploiting XXE to perform SSRF attacks&rdquo;.  [reference]</p>
 <p>First, we declare the entity and send the request. It doesn&rsquo;t matter what the entity is called or what exactly it is referencing, right now we are just checking whether we can declare entities at all. For example, my payload looks like this:</p>
 <p><code>&lt;!DOCTYPE test [ &lt;!ENTITY test &quot;test&quot;&gt; ]&gt;</code></p>
 <p>We place it right after the XML declaration:</p>
-<p><img src="/Images/XXE02_images/XXE02_03.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_03.png" alt=""></p>
 <p>The response doesn&rsquo;t result in an error. This means that we can indeed declare entities without a problem. As the next step, let&rsquo;s check if we can also reference the entity we just declared. We do this by using the name of the entity (&ldquo;test&rdquo; in this case) between an ampersand (&amp;) and a semicolon (;) and replacing the current productId value with that.</p>
-<p><img src="/Images/XXE02_images/XXE02_04.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_04.png" alt=""></p>
 <p>The response returns this error: &ldquo;Entities are not allowed for security reasons&rdquo;. This means that we can&rsquo;t reference the entity within the XML document.</p>
 <p>Luckily, in this case, we can use an alternative method: parameter entities. Basically it means that we will reference the entity within the DOCTYPE, rather than outside of it. In order to use parameter entities, we add the percent sign (%) in front of the name of the entity and then reference it using the percent sign (%) and a semicolon (;), so now our payload looks like this:</p>
 <p><code>&lt;!DOCTYPE test [&lt;!ENTITY % test &quot;test&quot;&gt; %test; ]&gt;</code></p>
-<p><img src="/Images/XXE02_images/XXE02_05.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_05.png" alt=""></p>
 <p>When we send this request, we get a different reponse: &ldquo;XML parsing error&rdquo;! This is good because it shows us that the app is parsing XML. Now, let&rsquo;s try doing an out-of-band call to check if we can get the app to communicate to our Collaborator server. Since now we&rsquo;re dealing with an external entity, we need to add the keyword SYSTEM, followed by our Collaborator payload (right click -&gt; Insert Collaborator payload):</p>
 <p><code>&lt;!DOCTYPE test [&lt;!ENTITY % test SYSTEM &quot;http://Burp-Collaborator-Payload&quot;&gt; %test; ]&gt;</code></p>
 <p>Now our XML looks like this:</p>
-<p><img src="/Images/XXE02_images/XXE02_06.png" alt=""></p>
+<p><img src="/images/XXE02_images/XXE02_06.png" alt=""></p>
 <p>When we send the request, we still get &ldquo;XML parsing error&rdquo;. However, when we go to the Collaborator tab and click &ldquo;Poll now&rdquo;, we see some results that confirm XXE via out-of-band interaction. We have solved the lab!</p>
 
         </section>

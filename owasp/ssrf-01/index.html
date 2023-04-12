@@ -145,21 +145,21 @@ To solve the lab, use the stock check functionality to scan the internal <code>
 </article>
 <p>Okay, let&rsquo;s run Burp and let&rsquo;s go!</p>
 <p>When we open the lab, we can see that it&rsquo;s a web store with a lot of different items. As we know, we need to find the stock check feature, so let&rsquo;s click on one of the items. At the bottom of the page we see what we need:</p>
-<p><img src="/Images/SSRF01_images/SSRF01_01.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_01.png" alt=""></p>
 <p>Let&rsquo;s click &ldquo;Check stock&rdquo; and see what the request looks like in Burp. There we can see an internal IP address 192.168.0.1:</p>
-<p><img src="/Images/SSRF01_images/SSRF01_02.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_02.png" alt=""></p>
 <p>To make it look friendlier to the eye, we can also highlight the URL and press Ctrl+Shift+U to URL-decode it. Then let&rsquo;s send this request to Intruder. Our goal is to find an admin interface on port 8080 and in order to do that we will scan the 192.168.0.X IP range.</p>
 <p>First, we need to clear all the existing positions with &ldquo;Clear §&rdquo;, and then add a position marker only to the last octet of the IP address:</p>
-<p><img src="/Images/SSRF01_images/SSRF01_03.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_03.png" alt=""></p>
 <p>Next, in the &ldquo;Payloads&rdquo; tab, we need to choose &ldquo;Numbers&rdquo; as the payload type, and under &ldquo;Payload options&rdquo; let&rsquo;s set the number range from 1 to 255 (since this is the range of each octet) with a step count of 1.</p>
-<p><img src="/Images/SSRF01_images/SSRF01_04.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_04.png" alt=""></p>
 <p>Now we can run the attack. When we look at the status codes of the requests, we can see that most of them are 500 (Internal Server Error). However, when we sort the results by status, we can see that there is one result with a status code of 404. Interesting&hellip; This indicates that the server behind that IP address is running (great news!), but that specific page doesn&rsquo;t exist.</p>
 <p>All we need to do now is access the admin interface. Let&rsquo;s send the request from Intruder to Repeater and see what we can do. In this lab, for the sake of simplicity, we can find what we are looking for in a directory called /admin, so let&rsquo;s change the address accordingly.</p>
-<p><img src="/Images/SSRF01_images/SSRF01_05.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_05.png" alt=""></p>
 <p>In real-life scenarios, finding directories will most probably not be this straightforward. You can play around manually a little bit to see if you get lucky, but a more efficient way both time-and energy-wise would be bruteforcing using Burp Intruder.</p>
 <p>Now, when we go through the response for the request above we see that, in addition to the fact that this page indeed exists, there is a URL ending with <code>/admin/delete?username=carlos</code>.  Well, that looks suspiciously like something we need in order to erase Carlos from existence.</p>
 <p>We paste that URL in the correct place:</p>
-<p><img src="/Images/SSRF01_images/SSRF01_06.png" alt=""></p>
+<p><img src="/images/SSRF01_images/SSRF01_06.png" alt=""></p>
 <p>Let&rsquo;s send the request, et voilà, Carlos is no more and we have solved the lab!</p>
 
         </section>

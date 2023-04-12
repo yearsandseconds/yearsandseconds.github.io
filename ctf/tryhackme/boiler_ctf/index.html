@@ -221,7 +221,7 @@
 <p>With <code>ls -la</code> we are able to see a hidden file .info.txt. W can use <code>get .info.txt</code> to download the file into our machine, and it has the following content:</p>
 <pre tabindex="0"><code>Whfg jnagrq gb frr vs lbh svaq vg. Yby. Erzrzore: Rahzrengvba vf gur xrl!
 </code></pre><p>It looks like some sort of a substitution cipher, so we can start from there. If you&rsquo;re not sure what you are doing, you can play around with some online tools and most likely one of those will lead you in the right direction. This particular cipher used here is ROT13 that replaces a letter with the 13th letter after it in the alphabet. It&rsquo;s easy and pretty common, so if you suspect it might be this one, then chances are that it is!  Below you can see how it works, and yes, if you are feeling extra bored, you can do it manually.</p>
-<p><img src="/Images/BoilerCTF_images/thm_boiler_01_01.png" alt=""></p>
+<p><img src="/images/BoilerCTF_images/thm_boiler_01_01.png" alt=""></p>
 <p>This is the meaning of the content of .info.txt:</p>
 <pre tabindex="0"><code>Just wanted to see if you find it. Lol. Remember: Enumeration is the key!
 </code></pre><p>So&hellip; nothing interesting here except for some knowledge about ROT13. Moving on.</p>
@@ -277,7 +277,7 @@ local: something.txt remote: something.txt
 /index.php (Status: 200)</code></pre></div>
 </div>
 <p>Now for the fun part: falling into a thousand rabbit holes that don&rsquo;t lead anywhere.</p>
-<p><img src="/Images/BoilerCTF_images/thm_boiler_01_02.gif" alt=""></p>
+<p><img src="/images/BoilerCTF_images/thm_boiler_01_02.gif" alt=""></p>
 <h3 id="sar2html">Sar2html</h3>
 <p>But fear not, there is a way out! Under  <code>/joomla/_test</code>  we find sar2html for which we can use <a href="https://github.com/AssassinUKG/sar2HTML">this fun exploit</a> :</p>
 <div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">python3 sar2HTMLshell.py -ip [MACHINE_IP]/joomla/_test
@@ -368,7 +368,7 @@ bash-4.3# cat root.txt
 It wasn&#39;t that hard, was it?</code></pre></div>
 </div>
 <p>That&rsquo;s it, go grab a beverage of your choice!</p>
-<p><img src="/Images/BoilerCTF_images/thm_boiler_01_03.gif" alt=""></p>
+<p><img src="/images/BoilerCTF_images/thm_boiler_01_03.gif" alt=""></p>
 
         </section>
       </div>
